@@ -64,8 +64,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 /** ЗАМЕНИ эти импорты для другой пары (или скопируй файл под новое имя) */
-import leftImg  from '@/assets/cases/pair-1-left.png'
-import rightImg from '@/assets/cases/pair-1-right.png'
+import leftImg  from '@/assets/cases/pair-1-left2.png'
+import rightImg from '@/assets/cases/pair-1-right2.png'
 
 /** подписи (опционально) */
 const leftCaption  = ''
