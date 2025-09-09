@@ -2,7 +2,7 @@
   <section ref="root" class="w-full flex flex-col items-center gap-8 sm:gap-10 font-[Geist] text-[#101012]">
     <!-- Заголовок: «сонный» типинг -->
     <div class="w-full max-w-[1184px] pt-10 sm:pt-16 px-4">
-      <h2 class="text-[28px] sm:text-[36px] md:text-[44px] leading-tight font-normal not-italic" aria-label="Кому подойдёт">
+      <h2 class="text-[28px] sm:text-[36px] md:text-[44px] leading-tight font-medium not-italic" aria-label="Кому подойдёт">
         <span class="type-line">
           <span
             v-for="(ch, i) in titleChars"
@@ -17,24 +17,24 @@
     <!-- 3 пункта -->
     <div class="w-full max-w-[1184px] grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 px-4">
       <div class="dream-in" :class="{ on: reveal }" style="--d:80ms">
-        <DotCluster :filled="1" />
-        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-normal not-italic">Стартапам</h3>
+        <DotCluster :filled="1" :active="reveal" color="#007AFF" />
+        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-medium not-italic">Стартапам</h3>
         <p class="text-[14px] sm:text-[15px] leading-6 text-zinc-500">
           Гибко подстраиваемся под бюджет и помогаем выйти на первую прибыль
         </p>
       </div>
 
       <div class="dream-in" :class="{ on: reveal }" style="--d:160ms">
-        <DotCluster :filled="2" />
-        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-normal not-italic">Среднему бизнесу</h3>
+        <DotCluster :filled="2" :active="reveal" color="#007AFF" />
+        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-medium not-italic">Среднему бизнесу</h3>
         <p class="text-[14px] sm:text-[15px] leading-6 text-zinc-500">
           Проводим дизайн-аудит и находим точки роста, повышая ключевые метрики
         </p>
       </div>
 
       <div class="dream-in" :class="{ on: reveal }" style="--d:240ms">
-        <DotCluster :filled="3" />
-        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-normal not-italic">Крупному бизнесу</h3>
+        <DotCluster :filled="3" :active="reveal" color="#007AFF" />
+        <h3 class="text-base sm:text-lg md:text-xl leading-tight font-medium not-italic">Крупному бизнесу</h3>
         <p class="text-[14px] sm:text-[15px] leading-6 text-zinc-500">
           Способны заменять штат дизайнеров или вариативно встраиваться в текущую команду
         </p>
@@ -77,7 +77,7 @@
 
     <!-- заголовок секции -->
     <div class="w-full max-w-[1184px] pt-8 sm:pt-12 px-4">
-      <h3 class="text-[26px] sm:text-[34px] md:text-[42px] leading-tight font-normal not-italic" aria-label="Без рисков и догадок. Только результат">
+      <h3 class="text-[26px] sm:text-[34px] md:text-[42px] leading-tight font-medium not-italic" aria-label="Без рисков и догадок. Только результат">
         <span class="type-line">
           <span
             v-for="(ch, i) in subTitleChars"

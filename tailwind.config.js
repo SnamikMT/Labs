@@ -1,6 +1,5 @@
-
-/** @type {import('tailwindcss').Config} */
-export default {
+// tailwind.config.js
+module.exports = {
   content: [
     './components/**/*.{vue,js,ts}',
     './layouts/**/*.vue',
@@ -11,9 +10,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        geist: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      },
-    },
+        geist: ['"Geist"', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif']
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 }

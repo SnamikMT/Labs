@@ -21,7 +21,7 @@
       <div class="container mx-auto px-4 md:px-8 py-12 md:py-20 relative z-10">
         <!-- заголовок с типингом -->
         <h2
-          class="text-[28px] sm:text-[36px] md:text-[48px] leading-[1.05] tracking-[-0.02em] font-normal not-italic mb-8 sm:mb-10"
+          class="text-[28px] sm:text-[36px] md:text-[48px] leading-[1.05] tracking-[-0.02em] font-medium not-italic mb-8 sm:mb-10"
           aria-label="Остались вопросы? Мы ответим!"
         >
           <span class="type-line">

@@ -28,7 +28,7 @@
         <article class="flex flex-col items-start gap-3 text-left">
           <img :src="icon3" alt="Персональный менеджер" class="h-7 w-7 object-contain" />
           <h3 class="text-[18px] md:text-[20px] leading-6 font-medium text-[#101012]">
-            Персональный менеджер <span class="font-normal text-zinc-500">ответит</span>
+            Персональный менеджер <span class="font-medium text-zinc-500">ответит</span>
           </h3>
           <p class="text-[15px] leading-6 text-zinc-500">
             на любые вопросы даже ночью

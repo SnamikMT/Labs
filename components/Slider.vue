@@ -1,17 +1,17 @@
 <template>
-  <!-- full-bleed: тянется на всю ширину окна -->
+  <!-- full-bleed на всю ширину окна -->
   <div class="relative w-screen select-none" :class="bleedFix">
-    <!-- вьюпорт -->
+    <!-- вьюпорт БЕЗ вертикального скролла -->
     <div
       ref="viewport"
-      class="overflow-x-hidden overflow-y-visible"
+      class="overflow-x-hidden overflow-y-hidden"
       @mouseenter="pause" @mouseleave="play"
       @touchstart.passive="pause" @touchend.passive="play"
     >
       <!-- лента -->
       <div
         ref="track"
-        class="flex will-change-transform"
+        class="flex will-change-transform touch-pan-x"
         :style="{
           gap: gap + 'px',
           transform: `translateX(${tx}px)`,
@@ -23,9 +23,10 @@
       >
         <template v-for="(src, i) in looped" :key="i">
           <div class="shrink-0" :style="{ width: slideW + 'px' }">
-            <!-- карточка БЕЗ фона и БЕЗ границ -->
+            <!-- карточка БЕЗ фона/рамок, заметно выше -->
             <div
-              class="relative h-[420px] md:h-[520px] rounded-t-[32px] overflow-hidden"
+              class="relative h-[560px] sm:h-[640px] md:h-[740px] lg:h-[820px] xl:h-[900px]
+                         rounded-t-[32px] overflow-hidden"
               :style="cardStyle(i)"
               @click="onCardClick(i)"
             >
@@ -40,36 +41,24 @@
         </template>
       </div>
     </div>
-    <!-- full-bleed: тянется на всю ширину окна -->
-<div class="relative w-screen select-none" :class="bleedFix">
-  <!-- viewport + track ... как у тебя -->
 
-  <!-- нижний фейд/шум -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-x-0 bottom-0 h-[96px] md:h-[140px]"
-  >
-    <!-- белый градиент вверх -->
-    <div class="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-white/0"></div>
-
-    <!-- мягкая зернистость “белый шум” -->
-    <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-      <filter id="grain">
-        <!-- генерим шум -->
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" />
-        <!-- делаем его нейтрально-серым -->
-        <feColorMatrix type="saturate" values="0" />
-        <!-- приглушаем альфу, чтобы шум был деликатным -->
-        <feComponentTransfer>
-          <feFuncA type="table" tableValues="0 0.08" />
-        </feComponentTransfer>
-      </filter>
-      <!-- рисуем прямоугольник с фильтром; слой лёгкий -->
-      <rect width="100%" height="100%" filter="url(#grain)" fill="#fff" opacity="0.35" />
-    </svg>
-  </div>
-</div>
-
+    <!-- нижний «белый шум» + плавный белый фейд -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 bottom-0 h-[110px] sm:h-[140px] md:h-[160px]"
+    >
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-white/0"></div>
+      <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+        <filter id="grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" />
+          <feColorMatrix type="saturate" values="0" />
+          <feComponentTransfer>
+            <feFuncA type="table" tableValues="0 0.07" />
+          </feComponentTransfer>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain)" fill="#fff" opacity="0.28" />
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -96,28 +85,28 @@ const index    = ref(0) // индекс в looped
 const dragging = ref(false)
 let startX = 0, startTx = 0
 
-// если компонент стоит внутри контейнера с паддингами — чуть «выползем» наружу
-const bleedFix = '-ml-[50vw] left-1/2 relative'; // center + full-bleed
+// full-bleed фикса — выходим из контейнерных паддингов родителя
+const bleedFix = '-ml-[50vw] left-1/2 relative'; // центрируем и растягиваем
 
-/** активный индекс в пределах оригинального массива */
+/** активный индекс в пределах оригинального массива (если нужно) */
 const realIndex = computed(() => {
   const len = imgs.value.length
   return ((index.value % len) + len) % len
 })
 
-// сколько «торчит» сосед с каждой стороны (адаптивно от ширины окна)
+// сколько «торчит» сосед с каждой стороны (чуть смелее, чтобы уголки виднее)
 function peekByW(vw: number) {
-  const PEEK_VW = 0.12;                 // 12% экрана на сторону — можно увеличить/уменьшить
+  const PEEK_VW = 0.14;                 // 14% экрана на сторону
   const p = Math.round(vw * PEEK_VW);
-  return Math.max(36, Math.min(p, 240)); // границы безопасности
+  return Math.max(48, Math.min(p, 300)); // безопасные рамки
 }
 
-const peek = ref(28)
+const peek = ref(48)
 const step = ref(0)
 
 function measure() {
   if (!viewport.value) return
-  const vw = window.innerWidth            // было viewport.offsetWidth
+  const vw = window.innerWidth
   peek.value = peekByW(vw)
   slideW.value = Math.max(300, vw - 2 * peek.value)
   step.value   = slideW.value + gap
@@ -126,14 +115,13 @@ function measure() {
   apply()
 }
 
-
 function apply() {
   const vw = viewport.value?.offsetWidth ?? 0
   const centerGap = (vw - slideW.value) / 2
   tx.value = centerGap - index.value * step.value
 }
 
-/** стиль: лёгкий наклон соседей */
+/** лёгкий наклон соседей */
 function cardStyle(i:number) {
   const d = Math.max(-1, Math.min(1, i - index.value)) // -1, 0, 1
   const rot = d * 5
@@ -177,13 +165,16 @@ function onDown(e: PointerEvent) {
   startX = e.clientX
   startTx = tx.value
   pause()
+  // чтобы при «высоком» слайдере страница не прокручивалась жестами во время драга
+  e.preventDefault()
 }
 function onMove(e: PointerEvent) {
   if (!dragging.value) return
   const dx = e.clientX - startX
   tx.value = startTx + dx
+  e.preventDefault()
 }
-function onUp() {
+function onUp(e?: PointerEvent) {
   if (!dragging.value) return
   dragging.value = false
   const vw = viewport.value?.offsetWidth ?? 0
@@ -192,23 +183,24 @@ function onUp() {
   index.value = Math.round(raw)
   apply()
   play()
+  if (e) e.preventDefault()
 }
 
 onMounted(() => {
   index.value = imgs.value.length // середина
-  // делаем вьюпорт шириной окна
   if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
   measure()
   play()
-  window.addEventListener('resize', () => {
-    if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
-    measure()
-  })
+  window.addEventListener('resize', onResize, { passive: true })
 })
 onBeforeUnmount(() => {
   pause()
-  window.removeEventListener('resize', measure)
+  window.removeEventListener('resize', onResize)
 })
+function onResize() {
+  if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
+  measure()
+}
 watch(imgs, () => {
   index.value = imgs.value.length
   measure()

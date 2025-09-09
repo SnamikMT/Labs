@@ -10,7 +10,7 @@
       <div class="flex flex-col items-center text-center">
         <!-- H1: «сонный» типинг -->
         <h1
-          class="relative z-0 text-[#101012] font-[Geist] font-normal not-italic
+          class="relative z-0 text-[#101012] font-geist font-medium not-italic
                  leading-[1.05] tracking-[-0.02em]
                  text-[34px] sm:text-[44px] md:text-[56px] lg:text-[72px]"
           aria-label="Лендинги, которые"
