@@ -1,0 +1,30 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* full-bleed: элемент вырывается из центрального контейнера и тянется на 100vw */
+.full-bleed{
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+}
+
+/* удобный контейнер на 1440px, чтобы не дублировать классы */
+.container-1440{
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 2rem;  /* px-8 */
+  padding-right: 2rem;
+}
+@media (min-width: 1024px){
+  .container-1440{ padding-left: 3rem; padding-right: 3rem; } /* lg:px-12 */
+}
+@media (min-width: 1280px){
+  .container-1440{ padding-left: 4rem; padding-right: 4rem; } /* xl:px-16 */
+}
