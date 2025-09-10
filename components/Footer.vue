@@ -2,7 +2,7 @@
   <footer ref="root" class="relative overflow-hidden bg-[#F7F8FA] text-[#101012]">
     <!-- верхняя зона -->
     <div class="relative">
-      <!-- центр-лого: обёртка задаёт позицию, IMG — только анимация -->
+      <!-- центр-лого -->
       <div
         class="center-logo-wrap pointer-events-none select-none absolute z-0
                left-1/2 top-[45%] -translate-x-1/4 -translate-y-1/2
@@ -19,7 +19,7 @@
 
       <!-- контент -->
       <div class="container mx-auto px-4 md:px-8 py-12 md:py-20 relative z-10">
-        <!-- заголовок с типингом -->
+        <!-- заголовок -->
         <h2
           class="text-[28px] sm:text-[36px] md:text-[48px] leading-[1.05] tracking-[-0.02em] font-medium not-italic mb-8 sm:mb-10"
           aria-label="Остались вопросы? Мы ответим!"
@@ -40,9 +40,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
           <!-- ЛЕВО: контакты -->
           <div class="space-y-5 text-[15px] leading-6">
+            <!-- UK -->
             <div class="dream-in" :class="{ on: inView }" style="--d:60ms">
               <div class="flex items-center gap-2 text-zinc-500">
-                <span class="text-base">🇬🇧</span>
+                <img :src="flagGb" alt="UK" class="flag" />
                 <span>United Kingdom, London</span>
               </div>
               <div class="mt-1 flex items-center gap-2 text-zinc-500">
@@ -53,9 +54,10 @@
               <p class="mt-1">Text2</p>
             </div>
 
+            <!-- RU -->
             <div class="pt-2 dream-in" :class="{ on: inView }" style="--d:140ms">
               <div class="flex items-center gap-2 text-zinc-500">
-                <span class="text-base">🇷🇺</span>
+                <img :src="flagRu" alt="RU" class="flag" />
                 <span>Russia, Moscow</span>
               </div>
               <div class="mt-1 flex items-center gap-2 text-zinc-500">
@@ -81,7 +83,7 @@
             </div>
           </div>
 
-          <!-- ПРАВО: линк-колонки (справа на десктопе) -->
+          <!-- ПРАВО: ссылки -->
           <div class="flex flex-col gap-6 lg:justify-self-end lg:text-right w-[55%]">
             <div class="dream-in" :class="{ on: inView }" style="--d:100ms">
               <div class="text-zinc-500 text-xs mb-2">For professionals</div>
@@ -119,7 +121,7 @@
     </div>
 
     <!-- нижняя полоса -->
-    <div class="border-t border-zinc-200/60">
+    <div class="border-top">
       <div class="container mx-auto px-4 md:px-8 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
           <!-- слева -->
@@ -137,9 +139,11 @@
               <div class="flex items-center gap-1">
                 <span class="tp-star" v-for="n in 5" :key="n" :style="{'--i': n}"></span>
               </div>
-              <span class="inline-flex items-center gap-1">
+                <span class="inline-flex items-center gap-1">
+                <img :src="trustpilotBadge" alt="" class="tp-logo-svg" />
                 Trustpilot
-              </span>
+                </span>
+
             </div>
           </div>
 
@@ -181,16 +185,22 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-/* нижний логотип */
-import logoMono from '@/assets/icons/Logo Mono.svg'
-/* центральное лого (водяной знак) */
+/* логотипы */
+import logoMono   from '@/assets/icons/Logo Mono.svg'
 import centerLogo from '@/assets/icons/center-logo.png'
-/* соц. иконки — твои файлы */
+
+/* соцсети */
 import socialTg from '@/assets/social/telegram.svg'
 import socialWa from '@/assets/social/whatsapp.svg'
 import socialIg from '@/assets/social/instagram.svg'
 import socialBh from '@/assets/social/behance.svg'
 import socialDb from '@/assets/social/dribbble.svg'
+
+import trustpilotBadge from '@/assets/icons/trustpilot-badge.svg'
+
+/* флаги (положи свои в /assets/flags/) */
+import flagGb from '@/assets/flags/gb.svg'
+import flagRu from '@/assets/flags/ru.svg'
 
 /* ссылки */
 const tgHref = 'https://t.me/username'
@@ -199,7 +209,7 @@ const igHref = 'https://instagram.com/username'
 const bhHref = 'https://www.behance.net/username'
 const dbHref = 'https://dribbble.com/username'
 
-/* анимации при входе и типинг */
+/* in-view + «сонный» типинг */
 const root = ref<HTMLElement|null>(null)
 const inView = ref(false)
 let io: IntersectionObserver | null = null
@@ -237,28 +247,26 @@ onBeforeUnmount(() => io?.disconnect())
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
+.border-top { border-top: 1px solid rgba(0,0,0,.12); }
 
-/* ===== типинг (сонный) ===== */
+/* типинг */
 .type-line { white-space: pre-wrap; }
 .letter{
   display:inline-block;
   opacity:0;
   transform: translateY(12px) scale(.985);
   filter: blur(8px);
-  will-change: transform, filter, opacity;
 }
 .letter.space{ width:.35em; opacity:1; transform:none; filter:none; }
-.letter.on{
-  animation: dream-in .7s cubic-bezier(.2,.8,.2,1) forwards;
-}
+.letter.on{ animation: dream-in .7s cubic-bezier(.2,.8,.2,1) forwards; }
 @keyframes dream-in{
-  0%   { opacity:0; filter:blur(8px); transform:translateY(12px) scale(.985) }
-  65%  { opacity:1; filter:blur(0);   transform:translateY(-2px) scale(1.01) }
-  100% { opacity:1; filter:blur(0);   transform:translateY(0)    scale(1) }
+  0%{ opacity:0; filter:blur(8px); transform:translateY(12px) scale(.985) }
+  65%{ opacity:1; filter:blur(0); transform:translateY(-2px) scale(1.01) }
+  100%{ opacity:1; filter:blur(0); transform:translateY(0) scale(1) }
 }
 
-/* ===== плавные появления ===== */
+/* появление */
 .dream-in{
   opacity:0; transform: translateY(12px); filter: blur(6px);
   transition: opacity .65s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
@@ -266,71 +274,85 @@ onBeforeUnmount(() => io?.disconnect())
              filter .6s ease var(--d,0ms);
 }
 .dream-in.on{ opacity:1; transform: translateY(0); filter: blur(0); }
-
 .fade-up{
   opacity:0; transform: translateY(8px);
   transition: opacity .5s ease var(--d,0ms), transform .5s ease var(--d,0ms);
 }
 .fade-up.on{ opacity:1; transform: translateY(0); }
 
-/* ===== центр-лого (двухслойная схема) ===== */
-.center-logo-wrap{
-  filter: drop-shadow(0 18px 40px rgba(0,0,0,.08));
-}
+/* центр-лого */
+.center-logo-wrap{ filter: drop-shadow(0 18px 40px rgba(0,0,0,.08)); }
 .center-logo-img{
-  opacity: 0;
-  transform: translateY(-10px) scale(.97);
-  will-change: transform, opacity;
+  opacity:0; transform: translateY(-10px) scale(.97);
 }
 .center-logo-img.on{
-  animation:
-    logo-in 0.9s cubic-bezier(.2,.8,.2,1) forwards,
-    logo-float 6.5s ease-in-out 1s infinite alternate;
+  animation: logo-in .9s cubic-bezier(.2,.8,.2,1) forwards,
+             logo-float 6.5s ease-in-out 1s infinite alternate;
 }
-@keyframes logo-in{
-  0%   { opacity:0; transform: translateY(-10px) scale(.97); }
-  100% { opacity:.9; transform: translateY(0)     scale(1);   }
-}
-@keyframes logo-float{
-  0%   { transform: translateY(0)    scale(1);    }
-  50%  { transform: translateY(-6px) scale(1.005);}
-  100% { transform: translateY(2px)  scale(1);    }
-}
+@keyframes logo-in{ 0%{opacity:0; transform:translateY(-10px) scale(.97)} 100%{opacity:.9; transform:translateY(0) scale(1)} }
+@keyframes logo-float{ 0%{transform:translateY(0)} 50%{transform:translateY(-6px)} 100%{transform:translateY(2px)} }
 
-/* ===== ссылка-меню ===== */
-.footer-link{
-  display:inline-block;
-  opacity:.85;
-  transition:opacity .15s ease, transform .15s ease;
-}
+/* ссылки */
+.footer-link{ display:inline-block; opacity:.85; transition:opacity .15s ease, transform .15s ease; }
 .footer-link:hover{ opacity:1; transform:translateY(-1px); }
 
-/* Trustpilot */
+/* Флаги */
+.flag{ width:18px; height:12px; object-fit:cover; border-radius:2px; box-shadow:0 0 0 1px rgba(0,0,0,.06) inset; }
+
+/* Trustpilot: белая звезда на зелёном квадрате */
 .tp-star{
-  display:inline-block; width:18px; height:18px;
-  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  background:#00B67A;
-  transform: scale(.8);
-  opacity:.8;
+  position: relative;
+  display:inline-block;
+  width:18px; height:18px;
+  background:#00B67A; /* зелёная плашка */
+  /* квадрат — без скруглений */
+  transform: scale(.9);
+  opacity:.95;
   animation: star-pop .5s cubic-bezier(.2,.8,.2,1) both;
   animation-delay: calc(80ms * var(--i));
 }
+.tp-star::before{
+  content:'';
+  position:absolute; inset:3px; /* поля вокруг звезды */
+  background:#fff;             /* белая звезда */
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
 @keyframes star-pop{
   0%{ transform: scale(.6); opacity:0 }
-  60%{ transform: scale(1.1); opacity:1 }
-  100%{ transform: scale(1); opacity:1 }
+  60%{ transform: scale(1.05); opacity:1 }
+  100%{ transform: scale(.9); opacity:1 }
 }
-.tp-badge{ width:10px; height:10px; border-radius:2px; background:#00B67A; display:inline-block; }
+
+/* Trustpilot маленький бейдж через SVG */
+.tp-logo-svg{
+  width:16px; height:16px;
+  display:inline-block;
+  transform: translateY(1px);
+}
+
+/* соц-иконки: больше и без белого фона */
+.social{
+  display:inline-grid; place-items:center;
+  padding:6px;               /* увеличили кликабельную область */
+  border-radius:8px;         /* лёгкое скругление клика */
+  background: transparent;   /* убрали белый фон */
+  box-shadow: none;          /* убрали тени-пузыри */
+  transition: transform .15s ease;
+}
+.social img{ width:28px; height:28px; }  /* сами иконки крупнее */
+.social:hover{ transform: translateY(-2px); }
+
+/* убираем прежний «блик» у соцкнопок, если он был */
+.social::after{ display:none !important; }
+
+.tp-logo::before{
+  content:'';
+  position:absolute; inset:2px;
+  background:#fff;
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
 
 /* соцкнопки */
-.social{
-  display:grid; place-items:center;
-  width:44px; height:44px; border-radius:9999px;
-  background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.06);
-  transition: transform .15s ease, box-shadow .15s ease;
-  position: relative; overflow: hidden;
-}
-.social img{ width:20px; height:20px }
 .social::after{
   content:''; position:absolute; inset:-2px;
   background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 35%, transparent 65%);
@@ -340,7 +362,7 @@ onBeforeUnmount(() => io?.disconnect())
 .social:hover{ transform: translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.1) }
 .social:hover::after{ transform: translateX(140%) skewX(-20deg); }
 
-/* мелкие адаптивные штрихи */
+/* адаптив */
 @media (max-width: 480px){
   .center-logo-img{ width:200px }
 }

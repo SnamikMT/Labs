@@ -1,6 +1,6 @@
 <template>
   <section class="bg-white">
-    <div class="container mx-auto px-4 md:px-8">
+    <div class="container mx-auto px-4 md:px-8 mt-[64px]">
       <div class="h-px bg-zinc-200/70"></div>
 
       <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 md:gap-10 py-10 md:py-12">
@@ -40,5 +40,5 @@ import gsea  from '@/assets/awards/gsea.svg'
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 </style>

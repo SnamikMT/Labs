@@ -1,6 +1,6 @@
 <template>
   <section ref="root" class="w-full bg-white">
-    <div class="container mx-auto px-4 md:px-8 py-8 md:py-10">
+    <div class="container mx-auto px-4 py-8">
       <!-- верхняя линия -->
       <div
         class="h-px bg-zinc-200/70 transition-opacity duration-700"
@@ -18,7 +18,7 @@
         />
 
         <ul
-          class="mt-6 md:mt-8 flex items-center justify-between gap-6 md:gap-10 lg:gap-14
+          class="mt-6 md:mt-[64px] flex items-center justify-between gap-6 md:gap-10 lg:gap-14
                  overflow-x-auto flex-nowrap no-scrollbar"
         >
           <li
@@ -40,7 +40,7 @@
 
       <!-- нижняя линия -->
       <div
-        class="mt-6 md:mt-8 h-px bg-zinc-200/70 transition-opacity duration-700"
+        class="mt-6 md:mt-[64px] h-px bg-zinc-200/70 transition-opacity duration-700"
         :class="reveal ? 'opacity-100' : 'opacity-0'"
         :style="{ transitionDelay: `${80 * (logos.length + 1)}ms` }"
       />
@@ -95,7 +95,7 @@ onBeforeUnmount(() => io?.disconnect())
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 
 /* приглушённые логотипы как на макете */
 .logo-muted {

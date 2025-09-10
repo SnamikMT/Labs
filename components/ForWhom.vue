@@ -1,7 +1,10 @@
 <template>
-  <section ref="root" class="w-full flex flex-col items-center gap-8 sm:gap-10 font-[Geist] text-[#101012]">
-    <!-- Заголовок: «сонный» типинг -->
-    <div class="w-full max-w-[1184px] pt-10 sm:pt-16 px-4">
+  <section
+    ref="root"
+    class="w-full flex flex-col items-center gap-16 font-[Geist] text-[#101012]"
+  >
+    <!-- Заголовок -->
+    <div class="w-full max-w-[1184px] pt-16 px-4">
       <h2 class="text-[28px] sm:text-[36px] md:text-[44px] leading-tight font-medium not-italic" aria-label="Кому подойдёт">
         <span class="type-line">
           <span
@@ -15,7 +18,7 @@
     </div>
 
     <!-- 3 пункта -->
-    <div class="w-full max-w-[1184px] grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 px-4">
+    <div class="w-full max-w-[1184px] grid grid-cols-1 md:grid-cols-3 gap-16 px-4">
       <div class="dream-in" :class="{ on: reveal }" style="--d:80ms">
         <DotCluster :filled="1" :active="reveal" color="#007AFF" />
         <h3 class="text-base sm:text-lg md:text-xl leading-tight font-medium not-italic">Стартапам</h3>
@@ -42,19 +45,15 @@
     </div>
 
     <!-- разделитель -->
-    <div class="w-full px-4">
+    <div class="w-full max-w-[1184px] px-4">
       <div class="h-px bg-zinc-200/70 fade-in" :class="{ on: reveal }" style="--d:300ms"></div>
     </div>
 
-    <!-- 2 проекта (с новым hover-эффектом) -->
+    <!-- 2 проекта -->
     <div class="w-full max-w-[1184px] px-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
         <div class="card-in" :class="{ on: reveal }" style="--d:360ms">
-          <div
-            class="img-card"
-            @mousemove="tilt"
-            @mouseleave="resetTilt"
-          >
+          <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
             <div class="img-card__3d">
               <img :src="project1" alt="" class="img-card__media" draggable="false" />
             </div>
@@ -62,11 +61,7 @@
         </div>
 
         <div class="card-in" :class="{ on: reveal }" style="--d:420ms">
-          <div
-            class="img-card"
-            @mousemove="tilt"
-            @mouseleave="resetTilt"
-          >
+          <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
             <div class="img-card__3d">
               <img :src="project2" alt="" class="img-card__media" draggable="false" />
             </div>
@@ -75,61 +70,73 @@
       </div>
     </div>
 
-    <!-- заголовок секции -->
-    <div class="w-full max-w-[1184px] pt-8 sm:pt-12 px-4">
-      <h3 class="text-[26px] sm:text-[34px] md:text-[42px] leading-tight font-medium not-italic" aria-label="Без рисков и догадок. Только результат">
+    <!-- Заголовок 2 -->
+    <div class="w-full max-w-[1184px] px-4">
+      <h3
+        class="text-[26px] sm:text-[34px] md:text-[42px] leading-tight font-medium not-italic"
+        aria-label="Без рисков и догадок. Только результат"
+      >
         <span class="type-line">
-          <span
-            v-for="(ch, i) in subTitleChars"
-            :key="'b'+i"
-            class="letter"
-            :class="{ on: i < typedCount2, space: ch === ' ' }"
-          >{{ ch }}</span>
+          <template v-for="(ch, i) in subTitleChars" :key="'b'+i">
+            <br v-if="ch === '\n' && i < typedCount2" />
+            <span
+              v-else
+              class="letter"
+              :class="{ on: i < typedCount2, space: ch === ' ' }"
+            >{{ ch }}</span>
+          </template>
         </span>
       </h3>
     </div>
 
-    <!-- большой мокап -->
+
+    <!-- Apple-like стек: теперь точно помещается в экран и анимируется ступенчато -->
     <div class="w-full max-w-[1184px] px-4">
-      <div class="mockup">
-        <img :src="img1" alt="" class="mock-piece p1" :class="{ on: reveal }" draggable="false" />
-        <img :src="img2" alt="" class="mock-piece p2" :class="{ on: reveal }" draggable="false" />
-        <img :src="img3" alt="" class="mock-piece p3" :class="{ on: reveal }" draggable="false" />
+      <div ref="appleStack" class="apple-stack">
+        <img ref="padLeft"   :src="img1" class="pad left"   alt="" draggable="false" />
+        <img ref="padCenter" :src="img2" class="pad center" alt="" draggable="false" />
+        <img ref="padRight"  :src="img3" class="pad right"  alt="" draggable="false" />
       </div>
-    </div>
-
-    <!-- подзаголовок CTA -->
-    <div class="w-full max-w-[1184px] text-[15px] sm:text-base md:text-xl leading-tight px-4">
-      <p class="clip-in" :class="{ on: reveal }" style="--d:600ms">
+      <!-- Подпись: чёрная строка + СЕРАЯ на новой строке, размер 18px -->
+      <p class="mt-6 text-[18px] leading-6 font-medium">
         Получите бесплатную концепцию дизайна в тот же день
-      </p>
-      <p class="clip-in text-zinc-500" :class="{ on: reveal }" style="--d:660ms">
-        Чтобы быть уверенным, что Вам точно понравится
+        <span class="block text-zinc-500 font-normal break-words">
+          Чтобы быть уверенным, что Вам точно понравится
+        </span>
       </p>
     </div>
 
-    <!-- две карточки (тоже с новым hover) -->
-    <div class="w-full max-w-[1184px] grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 px-4">
-      <div class="box-in" :class="{ on: reveal }" style="--d:700ms">
-        <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
-          <div class="img-card__3d">
-            <img :src="stage" alt="" class="img-card__media contain" draggable="false" />
-          </div>
-        </div>
-      </div>
-      <div class="box-in" :class="{ on: reveal }" style="--d:760ms">
-        <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
-          <div class="img-card__3d">
-            <img :src="balance" alt="" class="img-card__media contain" draggable="false" />
-          </div>
+
+<!-- две карточки + описание внутри одного контейнера (как в Apple-like) -->
+<div class="w-full max-w-[1184px] px-4">
+  <!-- сетка карточек -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8">
+    <div class="box-in" :class="{ on: reveal }" style="--d:700ms">
+      <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
+        <div class="img-card__3d">
+          <img :src="stage" alt="" class="img-card__media contain" draggable="false" />
         </div>
       </div>
     </div>
 
-    <!-- нижний разделитель -->
-    <div class="w-full px-4">
-      <div class="h-px bg-zinc-200/70 fade-in" :class="{ on: reveal }" style="--d:820ms"></div>
+    <div class="box-in" :class="{ on: reveal }" style="--d:760ms">
+      <div class="img-card" @mousemove="tilt" @mouseleave="resetTilt">
+        <div class="img-card__3d">
+          <img :src="balance" alt="" class="img-card__media contain" draggable="false" />
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- описание под карточками (ровно 24px сверху) -->
+  <p class="mt-6 text-[18px] leading-6 font-medium">
+    Следите за проектом через приложение и получайте кешбек,
+    <span class="block text-zinc-500 font-normal">
+      мы первые и единственные, кто это придумал
+    </span>
+  </p>
+</div>
+
   </section>
 </template>
 
@@ -149,12 +156,11 @@ const root = ref<HTMLElement|null>(null)
 const reveal = ref(false)
 let io: IntersectionObserver | null = null
 
-// типинг заголовков
+// типинг
 const title = 'Кому подойдёт'
-const subTitle = 'Без рисков и догадок Только результат'
+const subTitle = 'Без рисков и догадок\nТолько результат'
+const subTitleChars = Array.from(subTitle)
 const titleChars = title.split('')
-const subTitleChars = subTitle.split('')
-
 const typedCount = ref(0)
 const typedCount2 = ref(0)
 
@@ -166,7 +172,6 @@ function typeNext(targetRef: any, chars: string[], speedBase = 34, speedRand = 5
     window.setTimeout(() => typeNext(targetRef, chars, speedBase, speedRand), base)
   }
 }
-
 watch(reveal, (v) => {
   if (!v) return
   setTimeout(() => typeNext(typedCount,  titleChars, 32, 48), 40)
@@ -174,11 +179,12 @@ watch(reveal, (v) => {
 })
 
 onMounted(() => {
-  if (!root.value || !('IntersectionObserver' in window)) { reveal.value = true; return }
+  if (!root.value || !('IntersectionObserver' in window)) { reveal.value = true; startAppleStack(); return }
   io = new IntersectionObserver(
     (entries) => {
       if (entries.some(e => e.isIntersecting)) {
         reveal.value = true
+        startAppleStack()
         io?.disconnect()
       }
     },
@@ -186,25 +192,20 @@ onMounted(() => {
   )
   io.observe(root.value)
 })
-onBeforeUnmount(() => { io?.disconnect() })
+onBeforeUnmount(() => { io?.disconnect(); stopAppleStack() })
 
-/* ===== Hover 3D (курсор) для img-card ===== */
+/* Hover 3D */
 function tilt(e: MouseEvent) {
   const card = e.currentTarget as HTMLElement
   const rect = card.getBoundingClientRect()
-  const px = (e.clientX - rect.left) / rect.width  - 0.5 // -0.5..0.5
+  const px = (e.clientX - rect.left) / rect.width  - 0.5
   const py = (e.clientY - rect.top)  / rect.height - 0.5
-
-  const rx = (-py) * 8  // наклон по X (вперёд/назад)
-  const ry = ( px) * 10 // наклон по Y (влево/вправо)
-  const tx = (-px) * 12 // параллакс картинки
-  const ty = (-py) * 12
-
+  const rx = (-py) * 8, ry = (px) * 10, tx = (-px) * 12, ty = (-py) * 12
   card.style.setProperty('--rx', `${rx}deg`)
   card.style.setProperty('--ry', `${ry}deg`)
   card.style.setProperty('--tx', `${tx}px`)
   card.style.setProperty('--ty', `${ty}px`)
-  card.style.setProperty('--gx', `${(px+0.5)*100}%`) // позиция блика
+  card.style.setProperty('--gx', `${(px+0.5)*100}%`)
   card.style.setProperty('--gy', `${(py+0.5)*100}%`)
 }
 function resetTilt(e: MouseEvent) {
@@ -214,21 +215,85 @@ function resetTilt(e: MouseEvent) {
   card.style.setProperty('--tx', `0px`)
   card.style.setProperty('--ty', `0px`)
 }
+
+/* Apple-like стек: ступенчатая анимация, помещается в экран */
+const appleStack = ref<HTMLElement|null>(null)
+const padLeft   = ref<HTMLImageElement|null>(null)
+const padCenter = ref<HTMLImageElement|null>(null)
+const padRight  = ref<HTMLImageElement|null>(null)
+let rafId:number|undefined
+
+function easeOutQuart(t:number){ return 1 - Math.pow(1 - t, 4) }
+function clamp01(x:number){ return Math.max(0, Math.min(1, x)) }
+
+function frame() {
+  if (!appleStack.value) { rafId = requestAnimationFrame(frame); return }
+  const r = appleStack.value.getBoundingClientRect()
+  const vh = window.innerHeight || 1
+  // прогресс появления блока
+  let p = 1 - (r.top + r.height * .2) / (vh + r.height * .4)
+  p = clamp01(p)
+
+  // ступенчатые задержки для L/C/R
+  const dL = 0.00, dC = 0.10, dR = 0.20
+  const eL = easeOutQuart(clamp01((p - dL) / (1 - dL)))
+  const eC = easeOutQuart(clamp01((p - dC) / (1 - dC)))
+  const eR = easeOutQuart(clamp01((p - dR) / (1 - dR)))
+
+  // параметры (уменьшенные смещения — чтобы влезало по ширине даже на 1440)
+  const Lx = -220 * (1 - eL), Rx = 220 * (1 - eR)
+  const Ly =  70  * (1 - eL), Ry = 70  * (1 - eR)
+  const Lr =  -7  * (1 - eL), Rr =  7  * (1 - eR)
+  const Ls =  .88 + .12 * eL, Rs = .88 + .12 * eR
+
+  const Cy =  60  * (1 - eC)
+  const Cs =  .94 + .06 * eC
+  const Co =  eC
+
+  const settle = Math.sin((p - .88) * Math.PI * 2) * (p > .88 ? 2.5 : 0)
+
+  if (padLeft.value) {
+    padLeft.value.style.transform = `translate3d(${Lx}px, ${Ly+settle}px, 0) rotate(${Lr}deg) scale(${Ls})`
+    padLeft.value.style.opacity = String(eL)
+  }
+  if (padRight.value) {
+    padRight.value.style.transform = `translate3d(${Rx}px, ${Ry+settle}px, 0) rotate(${Rr}deg) scale(${Rs})`
+    padRight.value.style.opacity = String(eR)
+  }
+  if (padCenter.value) {
+    padCenter.value.style.transform = `translate3d(0, ${Cy+settle}px, 0) scale(${Cs})`
+    padCenter.value.style.opacity = String(Co)
+  }
+
+  rafId = requestAnimationFrame(frame)
+}
+function startAppleStack(){ stopAppleStack(); rafId = requestAnimationFrame(frame) }
+function stopAppleStack(){ if (rafId) cancelAnimationFrame(rafId) }
 </script>
 
 <style scoped>
-/* ===== появление (как раньше) ===== */
-.dream-in{
-  opacity:0; transform: translateY(12px) scale(.985); filter: blur(8px);
+/* типинг */
+.type-line { white-space: pre }
+.letter{ display:inline-block; opacity:0; transform: translateY(12px) scale(.985); filter: blur(8px) }
+.letter.space{ width:.35em; opacity:1; transform:none; filter:none }
+.letter.on{ animation: dream-in .7s cubic-bezier(.2,.8,.2,1) forwards }
+@keyframes dream-in{
+  0%{ opacity:0; filter:blur(8px); transform:translateY(12px) scale(.985) }
+  65%{ opacity:1; filter:blur(0); transform:translateY(-2px) scale(1.01) }
+  100%{ opacity:1; filter:blur(0); transform:translateY(0) scale(1) }
+}
+
+/* появление карточек */
+.dream-in{ opacity:0; transform: translateY(12px) scale(.985); filter: blur(8px);
   transition: opacity .7s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
              transform .7s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
-             filter .6s ease var(--d,0ms);
-}
-.dream-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1); }
+             filter .6s ease var(--d,0ms) }
+.dream-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1) }
+
 .fade-in{ opacity:0; transition: opacity .6s ease var(--d,0ms) }
 .fade-in.on{ opacity:1 }
 
-/* карточки-проекты — адаптивные высоты */
+/* карточки */
 .card-in{
   height: 220px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
   opacity:0; transform: translateY(16px) scale(.975); filter: blur(10px);
@@ -239,112 +304,83 @@ function resetTilt(e: MouseEvent) {
 @media (min-width: 640px){ .card-in{ height: 260px } }
 @media (min-width: 768px){ .card-in{ height: 320px } }
 @media (min-width: 1024px){ .card-in{ height: 360px } }
-.card-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1); }
+.card-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1) }
 
-/* боксы снизу (контейнер уже есть) */
 .box-in{
-  border-radius: 24px; background:#F7F8FA; border:1px solid #eee; padding: 10px;
+  border-radius: 24px;
   opacity:0; transform: translateY(16px) scale(.98); filter: blur(8px);
   transition: opacity .75s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
              transform .8s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
              filter .7s ease var(--d,0ms);
 }
-.box-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1); }
+.box-in.on{ opacity:1; filter: blur(0); transform: translateY(0) scale(1) }
 
-/* ===== НОВЫЙ HOVER-ЭФФЕКТ для картинок ===== */
-.img-card{
+/* hover 3D */
+.img-card{ position: relative; height: 100%; border-radius: inherit; overflow: hidden; background: #fff;
+  border: 1px solid rgba(0,0,0,.06); box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  transform-style: preserve-3d; transition: box-shadow .25s ease, border-color .25s ease, transform .25s ease;
+  --rx: 0deg; --ry: 0deg; --tx: 0px; --ty: 0px; --gx: 50%; --gy: 50%; }
+.card-in .img-card, .box-in .img-card{ border: none; box-shadow: none }
+.img-card:hover{ box-shadow: 0 16px 40px rgba(0,0,0,.12); border-color: transparent }
+.img-card__3d{ height: 100%; transform: rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d; transition: transform .12s ease-out }
+.img-card__media{ width: 100%; height: 100%; object-fit: cover; transform: translate3d(var(--tx), var(--ty), 0) scale(1);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1); will-change: transform }
+.img-card:hover .img-card__media{ transform: translate3d(var(--tx), var(--ty), 0) scale(1.04) }
+.img-card__media.contain{ object-fit: contain; background:#fff }
+.img-card::after{ content:''; position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(600px 320px at var(--gx) var(--gy), rgba(255,255,255,.18), rgba(255,255,255,0) 60%);
+  opacity:0; transition: opacity .25s ease }
+.img-card:hover::after{ opacity:1 }
+
+/* Apple-like стек */
+.apple-stack{
   position: relative;
-  height: 100%;
-  border-radius: inherit;
+  height: clamp(360px, 48vw, 560px);
+  perspective: 1200px;
+  display: grid; place-items: center;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.06);
-  box-shadow: 0 8px 24px rgba(0,0,0,.06);
-  transform-style: preserve-3d;
-  transition: box-shadow .25s ease, border-color .25s ease, transform .25s ease;
-  /* переменные по умолчанию */
-  --rx: 0deg; --ry: 0deg; --tx: 0px; --ty: 0px; --gx: 50%; --gy: 50%;
-}
-.card-in .img-card, .box-in .img-card{ border: none; box-shadow: none; } /* не дублировать рамки */
-.img-card:hover{
-  box-shadow: 0 16px 40px rgba(0,0,0,.12);
-  border-color: transparent;
+  border-radius: 24px;
+  border: 1px solid #eee;
+  background: #F7F8FA;
 }
 
-/* 3D слой: наклон по переменным */
-.img-card__3d{
-  height: 100%;
-  transform: rotateX(var(--rx)) rotateY(var(--ry));
-  transform-style: preserve-3d;
-  transition: transform .12s ease-out;
+/* размеры так подобраны, чтобы точно влезать в экран */
+.pad{ position:absolute; will-change: transform, opacity; opacity:0 }
+/* desktop */
+@media (min-width: 1024px){
+  .pad.left, .pad.right{ max-width: 34vw; max-height: 70%; }
+  .pad.center{ max-width: 40vw; max-height: 78%; z-index: 2 }
+}
+/* tablets */
+@media (min-width: 640px) and (max-width: 1023.98px){
+  .pad.left, .pad.right{ max-width: 42vw; max-height: 70%; }
+  .pad.center{ max-width: 48vw; max-height: 78%; z-index: 2 }
+}
+/* mobile */
+@media (max-width: 639.98px){
+  .apple-stack{ height: 420px }
+  .pad.left, .pad.right{ max-width: 66vw; max-height: 64%; }
+  .pad.center{ max-width: 78vw; max-height: 72%; z-index: 2 }
 }
 
-/* само изображение — лёгкий параллакс и зум */
-.img-card__media{
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transform: translate3d(var(--tx), var(--ty), 0) scale(1);
-  transition: transform .35s cubic-bezier(.2,.8,.2,1);
-  will-change: transform;
-}
-.img-card:hover .img-card__media{ transform: translate3d(var(--tx), var(--ty), 0) scale(1.04); }
-.img-card__media.contain{ object-fit: contain; background:#fff; }
+.pad.center{ z-index: 2 }
+.pad.left{ left: 6% }
+.pad.right{ right: 6% }
 
-/* бликующая маска — «glare» (едет к курсору) */
-.img-card::after{
-  content: '';
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(600px 320px at var(--gx) var(--gy),
-      rgba(255,255,255,.18), rgba(255,255,255,0) 60%);
-  opacity: 0; transition: opacity .25s ease;
-}
-.img-card:hover::after{ opacity: 1; }
-
-/* большой мокап (как раньше, с мобильными правками) */
-.mockup{
-  position: relative;
-  height: 340px;
-  border-radius: 24px; overflow: hidden;
-  border: 1px solid #eee; background:#F7F8FA;
-}
-@media (min-width: 640px){ .mockup{ height: 420px } }
-@media (min-width: 768px){ .mockup{ height: 520px } }
-@media (min-width: 1024px){ .mockup{ height: 540px } }
-
-.mock-piece{
-  position:absolute; pointer-events:none; user-select:none;
-  filter: drop-shadow(0 12px 28px rgba(0,0,0,.12));
-  opacity:0;
-  transition: opacity .9s cubic-bezier(.2,.75,.2,1) var(--d,0ms),
-             transform .9s cubic-bezier(.2,.75,.2,1) var(--d,0ms);
-}
-.p1{ bottom:0; left:6%;  width:28%; transform: translate(-60px, -40px) scale(.92); transition-delay: .22s; }
-.p2{ bottom:8px; left:28%; width:38%; transform: translate( 80px, -60px) scale(.92); transition-delay: .26s; }
-.p3{ bottom:0; left:48%; width:48%; transform: translate(140px, 80px)  scale(.92); transition-delay: .30s; }
-@media (max-width: 639px){
-  .p1{ bottom:0; left:2%;  width:36%; transform: translate(-28px, -18px) scale(.94); }
-  .p2{ bottom:6px; left:24%; width:52%; transform: translate( 36px, -26px)  scale(.94); }
-  .p3{ bottom:0; left:50%; width:60%; transform: translate( 56px,  34px)  scale(.94); }
-}
-.mock-piece.on{ opacity:1; transform: translate(0,0) scale(1); }
-
-/* типинг букв */
-.type-line { white-space: pre; }
-.letter{ display:inline-block; opacity:0; transform: translateY(12px) scale(.985); filter: blur(8px); }
-.letter.space{ width:.35em; opacity:1; transform:none; filter:none; }
-.letter.on{ animation: dream-in .7s cubic-bezier(.2,.8,.2,1) forwards; }
-@keyframes dream-in{
-  0%{ opacity:0; filter:blur(8px); transform:translateY(12px) scale(.985) }
-  65%{ opacity:1; filter:blur(0); transform:translateY(-2px) scale(1.01) }
-  100%{ opacity:1; filter:blur(0); transform:translateY(0) scale(1) }
-}
+/* CTA текст раскрытие */
+.clip-in{ display:inline-block; opacity:0; transform: translateY(8px);
+  clip-path: inset(0 100% 0 0 round 4px);
+  transition: opacity .8s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
+             transform .8s cubic-bezier(.2,.8,.2,1) var(--d,0ms),
+             clip-path .9s cubic-bezier(.2,.8,.2,1) var(--d,0ms) }
+.clip-in.on{ opacity:1; transform: translateY(0); clip-path: inset(0 0 0 0 round 4px) }
 
 /* reduce motion */
 @media (prefers-reduced-motion: reduce){
-  .img-card__3d{ transition: none !important; transform: none !important; }
-  .img-card__media{ transition: none !important; transform: none !important; }
+  .apple-stack .pad{ opacity:1 !important; transform:none !important }
+  .img-card__3d, .img-card__media{ transition:none !important; transform:none !important }
   .img-card::after{ display:none }
+  .letter{ opacity:1 !important; transform:none !important; filter:none !important; animation:none !important }
+  .dream-in{ transition:none !important; opacity:1 !important; transform:none !important; filter:none !important }
 }
 </style>

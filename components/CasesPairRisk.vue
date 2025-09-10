@@ -1,7 +1,7 @@
 <template>
   <section ref="root" class="bg-white">
-    <div class="container mx-auto px-4 md:px-8 py-10 md:py-14">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[64px]">
         <!-- LEFT -->
         <figure
           class="space-y-3 transform-gpu will-change-transform transition-all duration-700 ease-out"
@@ -96,7 +96,7 @@ onBeforeUnmount(() => io?.disconnect())
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 
 /* ---------- 3D сцена ---------- */
 .card{

@@ -1,14 +1,12 @@
 <template>
-  <!-- full-bleed на всю ширину окна -->
+  <!-- full-bleed -->
   <div class="relative w-screen select-none" :class="bleedFix">
-    <!-- вьюпорт БЕЗ вертикального скролла -->
     <div
       ref="viewport"
       class="overflow-x-hidden overflow-y-hidden"
       @mouseenter="pause" @mouseleave="play"
       @touchstart.passive="pause" @touchend.passive="play"
     >
-      <!-- лента -->
       <div
         ref="track"
         class="flex will-change-transform touch-pan-x"
@@ -23,18 +21,17 @@
       >
         <template v-for="(src, i) in looped" :key="i">
           <div class="shrink-0" :style="{ width: slideW + 'px' }">
-            <!-- карточка БЕЗ фона/рамок, заметно выше -->
+            <!-- ВАЖНО: карточке задаём высоту, внутрянка без absolute -->
             <div
-              class="relative h-[560px] sm:h-[640px] md:h-[740px] lg:h-[820px] xl:h-[900px]
-                         rounded-t-[32px] overflow-hidden"
-              :style="cardStyle(i)"
+              class="rounded-t-[32px] overflow-hidden bg-white grid place-items-center"
+              :style="Object.assign({ height: cardH + 'px' }, cardStyle(i))"
               @click="onCardClick(i)"
             >
               <img
                 :src="src"
                 alt=""
                 draggable="false"
-                class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                class="block max-w-full max-h-full w-full h-full object-contain object-center pointer-events-none p-3 sm:p-4"
               />
             </div>
           </div>
@@ -42,10 +39,10 @@
       </div>
     </div>
 
-    <!-- нижний «белый шум» + плавный белый фейд -->
+    <!-- нижний фейд + лёгкий шум -->
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 bottom-0 h-[110px] sm:h-[140px] md:h-[160px]"
+      class="pointer-events-none absolute inset-x-0 bottom-0 h-[84px] sm:h-[120px]"
     >
       <div class="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-white/0"></div>
       <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none">
@@ -65,79 +62,66 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 
-/** Можно передать свои картинки через :images="[]" */
 const props = defineProps<{ images?: string[] }>()
 
-/** демо-картинки — замени на свои либо прокинь пропсом */
-import img1 from '~/assets/img/slider/1.jpg'
-import img2 from '~/assets/img/slider/2.jpg'
-import img3 from '~/assets/img/slider/3.jpg'
+import img1 from '~/assets/img/slider/11.jpg'
+import img2 from '~/assets/img/slider/22.jpg'
+import img3 from '~/assets/img/slider/33.jpg'
 const imgs = computed(() => props.images?.length ? props.images : [img1, img2, img3])
-
-/** тройной массив для бесконечного листания, стартуем из середины */
 const looped = computed(() => [...imgs.value, ...imgs.value, ...imgs.value])
 
 const viewport = ref<HTMLDivElement|null>(null)
 const slideW   = ref(0)
+const cardH    = ref(0)
 const gap      = 24
 const tx       = ref(0)
-const index    = ref(0) // индекс в looped
+const index    = ref(0)
 const dragging = ref(false)
 let startX = 0, startTx = 0
 
-// full-bleed фикса — выходим из контейнерных паддингов родителя
-const bleedFix = '-ml-[50vw] left-1/2 relative'; // центрируем и растягиваем
+const bleedFix = '-ml-[50vw] left-1/2 relative'
 
-/** активный индекс в пределах оригинального массива (если нужно) */
-const realIndex = computed(() => {
-  const len = imgs.value.length
-  return ((index.value % len) + len) % len
-})
-
-// сколько «торчит» сосед с каждой стороны (чуть смелее, чтобы уголки виднее)
 function peekByW(vw: number) {
-  const PEEK_VW = 0.14;                 // 14% экрана на сторону
-  const p = Math.round(vw * PEEK_VW);
-  return Math.max(48, Math.min(p, 300)); // безопасные рамки
+  const isMobile = vw < 640
+  const PEEK_VW = isMobile ? 0.06 : 0.14
+  const p = Math.round(vw * PEEK_VW)
+  return Math.max(24, Math.min(p, 300))
 }
-
 const peek = ref(48)
 const step = ref(0)
 
 function measure() {
   if (!viewport.value) return
   const vw = window.innerWidth
-  peek.value = peekByW(vw)
+  peek.value   = peekByW(vw)
   slideW.value = Math.max(300, vw - 2 * peek.value)
   step.value   = slideW.value + gap
-  // ширину вьюпорта держим = ширине окна для full-bleed
   viewport.value.style.width = vw + 'px'
+
+  // адаптивная высота карточки (без кропа)
+  const h = Math.min(Math.max(Math.round(vw * 0.56), 260), 740)
+  cardH.value = h
+
   apply()
 }
-
 function apply() {
   const vw = viewport.value?.offsetWidth ?? 0
   const centerGap = (vw - slideW.value) / 2
   tx.value = centerGap - index.value * step.value
 }
-
-/** лёгкий наклон соседей */
 function cardStyle(i:number) {
-  const d = Math.max(-1, Math.min(1, i - index.value)) // -1, 0, 1
-  const rot = d * 5
-  const sc  = d === 0 ? 1 : 0.985
+  const d = Math.max(-1, Math.min(1, i - index.value))
+  const rot = d * 4.5
+  const sc  = d === 0 ? 1 : 0.987
   return {
     transform: `rotate(${rot}deg) scale(${sc})`,
     transition: dragging.value ? 'none' : 'transform .5s ease'
   }
 }
-
-/** клики по «уголкам» */
 function onCardClick(i:number) {
   if (i < index.value) prev()
   else if (i > index.value) next()
 }
-
 function next() {
   index.value++
   if (index.value >= imgs.value.length * 2) index.value = imgs.value.length
@@ -153,19 +137,16 @@ function go(i:number) {
   apply()
 }
 
-/** autoplay */
 let timer: number | null = null
 function play() { if (!timer) timer = window.setInterval(next, 3500) }
 function pause() { if (timer) { window.clearInterval(timer); timer = null } }
 
-/** drag */
 function onDown(e: PointerEvent) {
   dragging.value = true
   ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
   startX = e.clientX
   startTx = tx.value
   pause()
-  // чтобы при «высоком» слайдере страница не прокручивалась жестами во время драга
   e.preventDefault()
 }
 function onMove(e: PointerEvent) {
@@ -185,9 +166,13 @@ function onUp(e?: PointerEvent) {
   play()
   if (e) e.preventDefault()
 }
+function onResize() {
+  if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
+  measure()
+}
 
 onMounted(() => {
-  index.value = imgs.value.length // середина
+  index.value = imgs.value.length
   if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
   measure()
   play()
@@ -197,10 +182,6 @@ onBeforeUnmount(() => {
   pause()
   window.removeEventListener('resize', onResize)
 })
-function onResize() {
-  if (viewport.value) viewport.value.style.width = window.innerWidth + 'px'
-  measure()
-}
 watch(imgs, () => {
   index.value = imgs.value.length
   measure()

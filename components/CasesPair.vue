@@ -1,7 +1,7 @@
 <template>
   <section ref="root" class="bg-white">
-    <div class="container mx-auto px-4 md:px-8 py-10 md:py-14">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+    <div class="container mx-auto px-4 md:px-8 py-10 md:py-[64px]">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[64px]">
         <!-- LEFT -->
         <figure
           class="space-y-3 transform-gpu will-change-transform transition-all duration-700 ease-out"
@@ -10,7 +10,7 @@
         >
           <div class="card">
             <div class="tilt">
-              <div class="wobble rounded-[28px] overflow-hidden border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,.06)]
+              <div class="wobble rounded-[28px] overflow-hidden border shadow-[0_8px_30px_rgba(0,0,0,.06)]
                           h-[280px] sm:h-[320px] md:h-[380px] lg:h-[440px] bg-white">
                 <div class="h-full w-full grid place-items-center p-4 md:p-6">
                   <img
@@ -96,7 +96,7 @@ onBeforeUnmount(() => io?.disconnect())
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 
 /* ---------- 3D сцена ---------- */
 .card{

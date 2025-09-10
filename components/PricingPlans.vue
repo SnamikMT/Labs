@@ -1,6 +1,6 @@
 <template>
   <section ref="root" class="bg-white">
-    <div class="container mx-auto px-4 md:px-8 py-12 md:py-16">
+    <div class="container mx-auto px-4 md:px-8 font-medium">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         <!-- Карточки -->
         <article
@@ -225,7 +225,7 @@ onBeforeUnmount(() => io?.disconnect())
 </script>
 
 <style scoped>
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 
 /* ===== Въезд карточек с «поддёргиванием» ===== */
 .price-card{
@@ -342,7 +342,7 @@ onBeforeUnmount(() => io?.disconnect())
   100%{ opacity:1; transform: translateY(0) scale(1); }
 }
 
-.container { max-width: 1144px; }
+.container { max-width: 1184px; }
 
 /* reduce motion */
 @media (prefers-reduced-motion: reduce){
